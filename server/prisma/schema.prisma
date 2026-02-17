@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model GameImage {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  imageUrl  String
+  width     Int?
+  height    Int?
+  createdAt DateTime @default(now())
+
+  characters Character[]
+  rounds     Round[]
+  highScores HighScore[]
+}
+
+model Character {
+  id   String @id @default(cuid())
+  name String
+
+  // normalized bounding box [0..1]
+  xMin Float
+  yMin Float
+  xMax Float
+  yMax Float
+
+  // marker point to display
+  foundX Float
+  foundY Float
+
+  imageId String
+  image   GameImage @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  // ✅ opposite relation field (this fixes your original error)
+  foundCharacters FoundCharacter[]
+
+  @@unique([imageId, name])
+}
+
+model Round {
+  id      String    @id @default(cuid())
+  imageId String
+  image   GameImage @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  sessionId  String
+  startedAt  DateTime
+  endedAt    DateTime?
+  durationMs Int?
+
+  found     FoundCharacter[]
+  createdAt DateTime         @default(now())
+
+  @@index([sessionId])
+  @@index([imageId])
+}
+
+model FoundCharacter {
+  id      String @id @default(cuid())
+  roundId String
+  round   Round  @relation(fields: [roundId], references: [id], onDelete: Cascade)
+
+  characterId String
+  character   Character @relation(fields: [characterId], references: [id], onDelete: Cascade)
+
+  foundAt DateTime @default(now())
+
+  @@unique([roundId, characterId])
+}
+
+model HighScore {
+  id      String    @id @default(cuid())
+  imageId String
+  image   GameImage @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  name       String
+  durationMs Int
+  createdAt  DateTime @default(now())
+
+  @@index([imageId, durationMs])
+}
