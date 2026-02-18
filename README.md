@@ -13,6 +13,19 @@ Database: PostgreSQL
 
 ORM: Prisma
 
+**🚀 Deployment Stack**
+Frontend Hosting
+
+Vercel
+
+Backend Hosting
+
+Render
+
+Database Hosting
+
+Neon (PostgreSQL)
+
 **🎮 Features**
 
 🖼 Multiple game images selectable from dropdown
@@ -30,27 +43,3 @@ ORM: Prisma
 🍪 Anonymous session tracking via cookies
 
 📐 Normalized coordinate system (resolution independent)
-
-**🚀 Running the Project**
-Backend
-cd server
-npm install
-npx prisma migrate dev
-npx prisma generate
-npm run seed
-npm run dev
-
-
-Backend runs on:
-
-http://localhost:5000
-
-Frontend
-cd client
-npm install
-npm run dev
-
-
-Frontend runs on:
-
-http://localhost:5173
