@@ -46,12 +46,12 @@ async function main() {
       characters: [
         {
           name: "Waldo",
-          xMin: 0.781,
-          yMin: 0.628,
-          xMax: 0.842,
-          yMax: 0.758,
-          foundX: 0.812,
-          foundY: 0.695,
+          xMin: 0.017,
+          yMin: 0.637,
+          xMax: 0.182,
+          yMax: 0.673,
+          foundX: 0.178,
+          foundY: 0.663,
         },
         {
           name: "Wizard",
