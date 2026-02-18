@@ -14,6 +14,7 @@ Database: PostgreSQL
 ORM: Prisma
 
 **🚀 Deployment Stack**
+
 Frontend Hosting
 
 Vercel
