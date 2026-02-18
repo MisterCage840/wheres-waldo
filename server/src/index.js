@@ -16,7 +16,28 @@ const PORT = process.env.PORT || 5000
 const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || "http://localhost:5173"
 const COOKIE_SECURE = (process.env.COOKIE_SECURE || "false") === "true"
 
-app.use(cors({ origin: CLIENT_ORIGIN, credentials: true }))
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://wheres-waldo-kappa.vercel.app",
+]
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow server-to-server / curl (no origin)
+      if (!origin) return callback(null, true)
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true)
+      }
+
+      return callback(new Error("Not allowed by CORS: " + origin))
+    },
+    credentials: true,
+  }),
+)
+
+// app.use(cors({ origin: CLIENT_ORIGIN, credentials: true }))
 app.use(express.json())
 app.use(cookieParser())
 app.use(
@@ -24,13 +45,15 @@ app.use(
   express.static(path.join(__dirname, "..", "public", "images")),
 )
 
+const isProd = process.env.NODE_ENV === "production"
+
 function getOrCreateSessionId(req, res) {
   let sid = req.cookies.sid
   if (!sid) {
     sid = crypto.randomUUID()
     res.cookie("sid", sid, {
       httpOnly: true,
-      sameSite: COOKIE_SECURE ? "none" : "lax",
+      sameSite: isProd ? "none" : "lax",
       secure: COOKIE_SECURE,
       maxAge: 1000 * 60 * 60 * 24 * 30,
     })
