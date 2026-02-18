@@ -8,8 +8,8 @@ const { PrismaClient } = require("@prisma/client")
 const { PrismaPg } = require("@prisma/adapter-pg")
 const { z } = require("zod")
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL })
-const prisma = new PrismaClient({ adapter })
+const { prisma } = require("./prisma")
+
 const app = express()
 
 const PORT = process.env.PORT || 5000

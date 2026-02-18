@@ -3,8 +3,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
 }
+
 
 model GameImage {
   id        String   @id @default(cuid())
